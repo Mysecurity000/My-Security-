@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <title>CART3R SECURITY — Local Scanner</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="CART3R Security Startseite">
+        <span class="brand-mark">C</span>
+        <span><strong>CART3R</strong><small>SECURITY LAB</small></span>
+      </a>
+
+      <p class="nav-label">WORKSPACE</p>
+      <nav class="nav">
+        <a class="nav-link active" href="#dashboard"><span>▦</span> Dashboard</a>
+        <a class="nav-link" href="#scanner"><span>⌕</span> Dateiscanner</a>
+        <a class="nav-link" href="#activity"><span>≋</span> Scan-Protokoll</a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="local-badge"><i></i> LOKALER DEMO-MODUS</div>
+        <p>Deine ausgewählten Dateien werden nur in diesem Browser analysiert.</p>
+        <span class="version">CART3R SECURITY · v3.0</span>
+      </div>
+    </aside>
+
+    <main class="main-content" id="dashboard">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">SECURITY / OVERVIEW</p>
+          <h1>Dashboard</h1>
+        </div>
+        <div class="topbar-right">
+          <span class="status-pill"><i></i> SYSTEM BEREIT</span>
+          <div class="avatar">C</div>
+        </div>
+      </header>
+
+      <section class="welcome-panel">
+        <div class="welcome-copy">
+          <p class="eyebrow red">CART3R THREAT ANALYSIS</p>
+          <h2>Dein System.<br><span>Dein Überblick.</span></h2>
+          <p>Prüfe ausgewählte Dateien lokal auf bekannte Testsignaturen und sieh dir die Analyseergebnisse an.</p>
+          <a class="primary-button" href="#scanner">SCAN KONFIGURIEREN <span>↗</span></a>
+        </div>
+        <div class="orb-wrap" aria-hidden="true">
+          <div class="orb-ring ring-one"></div>
+          <div class="orb-ring ring-two"></div>
+          <div class="orb-core"><span>盾</span></div>
+          <div class="orb-caption">LOCAL ANALYSIS</div>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="Scan-Statistiken">
+        <article class="stat-card">
+          <div class="stat-top"><span>Dateien analysiert</span><span class="stat-icon">▤</span></div>
+          <strong id="filesCount">0</strong>
+          <small>In dieser Sitzung</small>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Bekannte Treffer</span><span class="stat-icon alert-icon">!</span></div>
+          <strong id="threatCount">0</strong>
+          <small>Testsignatur-Übereinstimmungen</small>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Nicht lesbar</span><span class="stat-icon">⌁</span></div>
+          <strong id="errorCount">0</strong>
+          <small>Dateien mit Analysefehler</small>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Letzter Scan</span><span class="stat-icon">◷</span></div>
+          <strong class="last-scan" id="lastScan">—</strong>
+          <small>Lokale Browser-Sitzung</small>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel scanner-panel" id="scanner">
+          <div class="panel-heading">
+            <div><p class="eyebrow">FILE INSPECTION</p><h3>Dateiscanner</h3></div>
+            <span class="mini-tag">SHA-256</span>
+          </div>
+          <p class="muted">Wähle einzelne Dateien oder einen Ordner aus. Die Dateien werden nicht hochgeladen, verschoben oder verändert.</p>
+
+          <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Dateien auswählen oder hier ablegen">
+            <div class="upload-icon">↑</div>
+            <strong>Dateien hier ablegen</strong>
+            <span>oder über eine der Schaltflächen auswählen</span>
+            <div class="file-actions">
+              <button class="secondary-button" id="chooseFiles" type="button">DATEIEN WÄHLEN</button>
+              <button class="secondary-button" id="chooseFolder" type="button">ORDNER WÄHLEN</button>
+            </div>
+            <small id="selectionInfo">Noch keine Dateien ausgewählt</small>
+          </div>
+          <input id="fileInput" type="file" multiple hidden>
+          <input id="folderInput" type="file" webkitdirectory directory multiple hidden>
+
+          <div class="scan-controls">
+            <label class="check-row"><input id="demoMode" type="checkbox" checked> Demo-Testsignatur aktivieren</label>
+            <button class="primary-button scan-button" id="scanButton" type="button" disabled>ANALYSE STARTEN <span>→</span></button>
+          </div>
+          <p class="tiny-note">Demo-Testsignatur: Dateien, deren Name „eicar-demo“ enthält, werden nur als simulierte Testtreffer markiert. Das ist keine echte Malware-Erkennung.</p>
+          <div class="progress-wrap" id="progressWrap" hidden>
+            <div class="progress-label"><span id="progressText">Analyse läuft …</span><span id="progressPercent">0%</span></div>
+            <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+          </div>
+        </article>
+
+        <article class="panel summary-panel">
+          <div class="panel-heading"><div><p class="eyebrow">SESSION SUMMARY</p><h3>Analyse-Status</h3></div></div>
+          <div class="summary-ring" id="summaryRing"><div><strong id="summaryNumber">0</strong><span>DATEIEN</span></div></div>
+          <p class="summary-title" id="summaryTitle">Bereit für den ersten Scan</p>
+          <p class="muted centered" id="summaryDescription">Wähle Dateien aus, um eine lokale Analyse zu starten.</p>
+          <button class="text-button" id="clearButton" type="button">Sitzung zurücksetzen ↺</button>
+        </article>
+      </section>
+
+      <section class="panel results-panel" id="activity">
+        <div class="panel-heading results-heading">
+          <div><p class="eyebrow">ACTIVITY LOG</p><h3>Scan-Protokoll</h3></div>
+          <button class="secondary-button compact" id="exportButton" type="button" disabled>BERICHT EXPORTIEREN ↓</button>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>DATEI</th><th>SHA-256</th><th>ERGEBNIS</th></tr></thead>
+            <tbody id="resultsBody">
+              <tr class="empty-row"><td colspan="3">Noch keine Analyse durchgeführt.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-footnote">Ein „Kein Testtreffer“-Ergebnis bedeutet nicht, dass eine Datei sicher ist.</p>
+      </section>
+
+      <footer class="footer">
+        <span>© 2026 CART3R SECURITY LAB</span>
+        <span>CLIENT-SIDE DEMO · KEIN VOLLSTÄNDIGER VIRUSSCANNER</span>
+      </footer>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
